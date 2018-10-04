@@ -7,6 +7,7 @@ int main() {
     printf("5 + 2 = %d\n", addNumber(5, 2));
     printf("%d\n", getTriangleType(3, 4, 5));
     printf("Hello, world");
+    printf("MDFK");
     return 0;
 }
 #endif // TEST
