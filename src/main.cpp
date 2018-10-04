@@ -7,16 +7,14 @@ int main() {
     printf("5 + 2 = %d\n", addNumber(5, 2));
     printf("%d\n", getTriangleType(3, 4, 5));
     printf("Hello, world");
-<<<<<<< HEAD
+
     printf("a-no-ne a-no-ne");
-=======
     printf("MDFK");
->>>>>>> master
     return 0;
 }
 #endif // TEST
 
-//YES 
+//YES
 
 int addNumber(int a, int b) {
     return a + b;
