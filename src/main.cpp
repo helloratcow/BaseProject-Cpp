@@ -6,11 +6,12 @@ int main() {
     printf("Rule Breaker!!!\n");
     printf("5 + 2 = %d\n", addNumber(5, 2));
     printf("%d\n", getTriangleType(3, 4, 5));
+    printf("%d\n",multiply(4, 4));
     printf("Hello, world\n");
 
 
     printf("a-no-ne a-no-ne\n");
-    printf("MDFK");
+    printf("MDFK\n");
 
     printf("fuck rat\n");
     printf("a-no-ne a-no-ne\n");
@@ -26,6 +27,10 @@ int main() {
 
 int addNumber(int a, int b) {
     return a + b;
+}
+
+int multiply(int a, int b){
+    return a * b;
 }
 
 int getTriangleType(int a, int b, int c) {

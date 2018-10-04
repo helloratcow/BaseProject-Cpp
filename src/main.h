@@ -3,5 +3,6 @@
 
 int addNumber(int a, int b);
 int getTriangleType(int a, int b, int c);
+int multiply(int a, int b);
 
 #endif // MAIN_H_INCLUDED
