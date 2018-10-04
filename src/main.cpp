@@ -7,17 +7,17 @@ int main() {
     printf("5 + 2 = %d\n", addNumber(5, 2));
     printf("%d\n", getTriangleType(3, 4, 5));
     printf("Hello, world\n");
-<<<<<<< Updated upstream
+
 
     printf("a-no-ne a-no-ne\n");
     printf("MDFK");
-=======
-    printf("¯ä¦Ñ¹«¶ÃÁ¿§ÚÃa¸Ü\n");
+
+    printf("fuck rat\n");
     printf("a-no-ne a-no-ne\n");
 
     printf("MDFK\n");
 
->>>>>>> Stashed changes
+
     return 0;
 }
 #endif // TEST
