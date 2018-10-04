@@ -6,16 +6,16 @@ int main() {
     printf("Rule Breaker!!!\n");
     printf("5 + 2 = %d\n", addNumber(5, 2));
     printf("%d\n", getTriangleType(3, 4, 5));
-    printf("Hello, world");
+    printf("Hello, world\n");
 <<<<<<< Updated upstream
 
-    printf("a-no-ne a-no-ne");
+    printf("a-no-ne a-no-ne\n");
     printf("MDFK");
 =======
-    printf("ρ公睹量и胊杠");
-    printf("a-no-ne a-no-ne");
+    printf("ρ公睹量и胊杠\n");
+    printf("a-no-ne a-no-ne\n");
 
-    printf("MDFK");
+    printf("MDFK\n");
 
 >>>>>>> Stashed changes
     return 0;
