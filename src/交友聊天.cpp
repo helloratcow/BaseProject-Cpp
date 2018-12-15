@@ -1,9 +1,20 @@
-
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
 #include<string.h>
 
+typedef struct{
+	char name[10];
+	char account[8];
+	char passward[8];
+	int id[7];
+} userinf, *puserinf;
+
+struct message{
+	char mes;
+	int line;
+	struct userinf;
+};
 void enterList(){
 	
 	printf("\n============================\n");
@@ -22,22 +33,23 @@ void add_friend(){
 
 
 void chat_friend(){
+	
 	char content[200];
 	char exit[]="exit";
 	int reback=1;
-printf("進入聊天室...(簡易版)");
-printf("\n============================\n");
-printf("如果要離開聊天室 請輸入'exit'\n");
+	printf("進入聊天室...(簡易版)");
+	printf("\n============================\n");
+	printf("如果要離開聊天室 請輸入'exit'\n");
 	while(reback){
 		printf("A:");
-		fgets(content,sizeof(content), stdin);
+		scanf("%s",content);
 		if(strncmp(exit, content,4) == 0){
 			printf("\n");
 			printf("即將離開聊天室...");
 			reback=0;
 			printf("\n============================\n");
 		}else{
-			printf("A:");
+			
 			puts(content);			
 		}
 	}
@@ -53,10 +65,40 @@ void delete_friend(){
 
 int main(void)
 {
-	int select=1,reback=1;
+	char acc[10],pass[10];
+	userinf user1 = {"Hoby", "d001", "0001", 1234567};
+	userinf user2 = {"Alice", "d002", "0002", 6666677}; 
+	int enter=0,select=0,reback=1;
 	char content[200];
 	char exit[]= "exit";
-	printf("//進去系統前要先登錄帳號密碼\n");
+	
+	while(enter!=1){
+		printf("帳號:");
+		scanf("%s",acc);
+		printf("密碼:");
+		scanf("%s",pass);
+		printf("\n");
+		
+		if(strcmp(acc,user1.account) == 0){
+			if(strcmp(pass,user1.passward) == 0){
+				select=1;
+				enter=1;
+				printf("welcome Hoby\n");
+			}else{
+				printf("帳號或密碼錯誤\n");
+			}
+		}else if(strcmp(acc,user2.account) == 0){
+			if(strcmp(pass,user2.passward) == 0){
+				select=1;
+				enter=1;
+				printf("welcome Alice\n");
+			}else{
+				printf("帳號或密碼錯誤\n");
+			}
+		}else{
+			printf("帳號或密碼錯誤\n");
+		}
+	}
 	while(select!=0){
 		printf("請選擇:\n1.查找好友\n2.聊天\n3.刪除\n0.離開(輸入數字以執行)\n\n") ;
 		scanf(" %d",&select);
@@ -72,6 +114,8 @@ int main(void)
 				break;
 			case(0):
 				return 0;
+			default:
+				printf("無效的指令");
 		}
 	}
 	system("pause");
