@@ -68,37 +68,11 @@ int main(void)
 	char acc[10],pass[10];
 	userinf user1 = {"Hoby", "d001", "0001", 1234567};
 	userinf user2 = {"Alice", "d002", "0002", 6666677}; 
-	int enter=0,select=0,reback=1;
+	int enter=0,select=5,reback=1;
 	char content[200];
 	char exit[]= "exit";
 	
-	while(enter!=1){
-		printf("帳號:");
-		scanf("%s",acc);
-		printf("密碼:");
-		scanf("%s",pass);
-		printf("\n");
-		
-		if(strcmp(acc,user1.account) == 0){
-			if(strcmp(pass,user1.passward) == 0){
-				select=1;
-				enter=1;
-				printf("welcome Hoby\n");
-			}else{
-				printf("帳號或密碼錯誤\n");
-			}
-		}else if(strcmp(acc,user2.account) == 0){
-			if(strcmp(pass,user2.passward) == 0){
-				select=1;
-				enter=1;
-				printf("welcome Alice\n");
-			}else{
-				printf("帳號或密碼錯誤\n");
-			}
-		}else{
-			printf("帳號或密碼錯誤\n");
-		}
-	}
+
 	while(select!=0){
 		printf("請選擇:\n1.查找好友\n2.聊天\n3.刪除\n0.離開(輸入數字以執行)\n\n") ;
 		scanf(" %d",&select);
