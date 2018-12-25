@@ -316,13 +316,21 @@ int add_friend() {
 	}	
 }
 int chat_friend() {
-	int meslock = 1;//1可以傳輸0不可以傳輸
+	int meslock = 1;//1可以傳輸 0不可以傳輸 0.5; 
 	char content[200];
+	char name[10];
 	char exit[]="exit";
-	int reback=1;
-	userinf *ptr;
+	int reback=1,line=0;
+	ynf *yptr;
+	yptr=fhead;
+	
+	olineUser *optr;
+	optr=ohead;
+	
+	
 	//history 要設計 使用者名稱的導入
-	printf("進入聊天室...(簡易版)");
+	printf("歡迎進入聊天室%s\n...簡易版",optr->name);
+	
 	printf("\n============================\n");
 	printf("如果要離開聊天室 請輸入'exit'\n");
 	while(reback) {
@@ -334,10 +342,11 @@ int chat_friend() {
 			reback=0;
 			printf("\n============================\n");
 		} else {
-			if(meslock=1) {
-				//	loadmeg(content);
+			if(meslock=1) {//	loadmeg(content);
+				
+			
 			}
-			printf("%s:%s\n",ptr->name,content);
+			printf("%s:%s\n",optr->name,content);
 			//printf("%s:%s\n",name,content);
 		}
 	}
