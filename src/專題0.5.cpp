@@ -80,6 +80,8 @@ int chatroom() {
 	char content[200];
 	char exit[]= "exit";
 	
+	
+	
 	for(int k=0;;k++) {
 		printf("\n============================\n");
 		printf("請選擇:\n1.查找好友\n2.聊天\n3.刪除\n0.離開(輸入數字以執行)\n\n") ;
@@ -250,29 +252,25 @@ int add_friend() {
 	userinf *ptr;
 	ptr=head;
 	
-	char fname[10];//此要好友名稱 
 	char name[10];//是誰要登入好友 
 	char account[10];
 	int oc=0,c=0;
 	printf("您是%s\n",optr->name);//還要修一下邏輯 此為定數 
 	strcpy(name,optr->name);
-	
 	printf("可加入名單:");
 	printf("\n----------------------------\n");
-	while(ptr!=NULL) {//原本應有判別有沒有=空 但都近來到這裡了至少會有登錄者本人的因此不判別 
-		if(ptr->next!=NULL){
+	while(ptr!=NULL) {
+		ptr=ptr->next;
+		if(strcmp(name,ptr->name)==0){//這是登錄者本身的資訊不因該出現 
 			ptr=ptr->next;
 		}else{
-			if(strcmp(name,ptr->name)==0){//這是登錄者本身的資訊不因該出現 
-			ptr=ptr->next;
-			}else{
-				printf("帳號:%s 名稱:%s \n",ptr->account,ptr->name);
-				if(ptr->next==NULL){//每次顯示資訊都要判斷是否為最後一筆 
-					printf("為以上資訊\n");
-					break;
-				}
+			printf("帳號:%s 名稱:%s \n",ptr->account,ptr->name);
+			if(ptr->next==NULL){
+				printf("以上結果\n");
+			break;
 			}	
 		}
+		
 	}
 	printf("\n----------------------------\n");
 	
@@ -293,19 +291,19 @@ int add_friend() {
 				printf("這是您的帳號不要玩弄我!");
 			}else{
 				if(fhead==NULL){
-				oc=1;
-				c++;
-				fhead=newfriend(name,fname,oc,c);
-			} else{
-				yptr=fhead;
-				c=1;
-				while(yptr->fnext!=NULL){
+					oc=1;
+					c++;
+					fhead=newfriend(name,ptr->name,oc,c);
+				} else{
+					yptr=fhead;
+					c=1;
+					while(yptr->fnext!=NULL){
 					yptr=yptr->fnext;
 					c++;
 				}
 				oc=1;
 				c++;
-				yptr->fnext=newfriend(name,fname,oc,c);
+				yptr->fnext=newfriend(name,ptr->name,oc,c);
 				yptr->fnext==NULL;
 			}
 			printf("你可以與%s聊天囉!\n",ptr->name);
@@ -319,6 +317,7 @@ int chat_friend() {
 	int meslock = 1;//1可以傳輸 0不可以傳輸 0.5; 
 	char content[200];
 	char name[10];
+	char fname[10];
 	char exit[]="exit";
 	int line=0;
 	ynf *yptr;
@@ -331,52 +330,80 @@ int chat_friend() {
 	mptr=mhead;
 	//history 要設計 使用者名稱的導入
 	printf("\n============================\n");
-	printf("歡迎進入聊天室%s\n...簡易版",optr->name);
+	printf("歡迎進入聊天大廳%s\n...簡易版",optr->name);
 	strcpy(name,optr->name);
-	printf("如果要離開聊天室 請輸入'exit'\n");
-	if(mptr!=NULL){
-		printf("查看過去的聊天紀錄");
-		printf("________________________________________________\n");
-	}
-	while(mptr!=NULL){
-		if(strcmp(name,mptr->name)==0){
-			printf("                               %s\n",mptr->content);
-			mptr=mptr->next;
-		}else if(strcmp(name,mptr->name)!=0){
-			printf("%s:%s\n",mptr->name,mptr->content);
-			mptr=mptr->next;
-		}else{
-			mptr=mptr->next;
+	printf("您的好友列表");
+	printf("\n----------------------------\n");
+	while(yptr!=NULL){
+		if(strcmp(name,yptr->name)==0){
+		printf("%s\n",yptr->fname);
+		yptr=yptr->fnext;
+		}else {
+			yptr=yptr->fnext;
 		}
 	}
-	for(int k=0;;k++) {
-		printf("________________________________________________\n");
-		printf("輸入您要說的話:");
-		scanf("%s",content);
-		if(strcmp(exit, content) == 0) {
-			printf("\n");
-			printf("即將離開聊天室...");
-			return 1;
-			printf("\n============================\n");
-		} else { 
-			if(meslock==1) {//	loadmeg(content);
-				if(mhead==NULL){
-					line=1;
-					mhead=newmsg(name,line,content);
+	printf("\n----------------------------\n");
+	printf("輸入您想對話的好友名稱");
+	scanf("%s",fname);
+	yptr=fhead;
+	while(yptr!=NULL){
+		if(strcmp(fname,yptr->fname)!=0 && yptr->fnext!=NULL){
+			yptr=yptr->fnext;
+		}
+		if(yptr->fnext==NULL&&strcmp(fname,yptr->fname)!=0){
+			printf("您沒有此好友");
+			break;
+		}
+		if(strcmp(fname,yptr->fname)==0){
+			printf("開始與%s對話吧!",fname);
+			printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+			printf("如果要離開聊天室 請輸入'exit'\n");
+			if(mptr!=NULL){
+				printf("過去的聊天紀錄");
+				printf("________________________________________________\n");
+			}
+			while(mptr!=NULL){
+				if(strcmp(name,mptr->name)==0){
+					printf("                               %s\n",mptr->content);
+					mptr=mptr->next;
+				}else if(strcmp(fname,mptr->name)!=0){
+					printf("%s:%s\n",mptr->name,mptr->content);
+					mptr=mptr->next;
 				}else{
-					mptr=mhead;
-					while(mptr->next!=NULL){
-						mptr=mptr->next;
-						line++;
-					}
-					mptr->next=newmsg(name,line,content);
-					mptr->next==NULL; 
+					mptr=mptr->next;
 				}
 			}
-			printf(":%s\n",content);
-			printf("________________________________________________\n");
+			for(int k=0;;k++) {
+				printf("________________________________________________\n");
+				printf("輸入您要說的話:");
+				scanf("%s",content);
+				if(strcmp(exit, content) == 0) {
+					printf("\n");
+					printf("即將離開聊天室...");
+					return 1;
+					printf("\n============================\n");
+				} else { 
+					if(meslock==1) {//	loadmeg(content);
+						if(mhead==NULL){
+							line=1;
+							mhead=newmsg(name,line,content);
+						}else{
+							mptr=mhead;
+							while(mptr->next!=NULL){
+								mptr=mptr->next;
+								line++;
+							}
+							mptr->next=newmsg(name,line,content);
+							mptr->next==NULL; 
+						}
+					}
+					printf(":%s\n",content);
+					printf("________________________________________________\n");
+				}
+			}
 		}
 	}
+	
 }
 int delete_friend() {
 	userinf *ptr;
