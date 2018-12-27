@@ -162,7 +162,7 @@ message *newmsg(char name[10],char fname[10],int line,char content[200]) {
 	return temp;
 }
 
-void printList() {//測試用 
+void printList() {//印出可加入好友用 
 	userinf *ptr;
 	ptr=head;
 //	printf("\n============================\n");
@@ -222,7 +222,7 @@ int landing() {
 	scanf(" %s",passward);
 	if(ptr==NULL) {
 		printf("目前沒有任何用戶註冊此程式...qq\n");
-		printf("即將返回初始頁面...");
+		printf("即將返回登陸頁面...");
 		return 1;
 	}
 	while(strcmp(account,ptr->account) != 0 &&ptr->next!=NULL) {
@@ -230,7 +230,7 @@ int landing() {
 	}
 	if(ptr->next==NULL&&strcmp(account,ptr->account) != 0) {//如果判斷帳號錯誤會先跳這個 
 		printf("帳號或密碼輸入錯誤\n");
-		printf("即將返回初始頁面...");
+		printf("即將返回登陸頁面...");
 	}
 	if(strcmp(account,ptr->account) == 0) {
 		if(strcmp(passward,ptr->passward) == 0) {
@@ -262,7 +262,7 @@ int landing() {
 			chatroom();
 		} else {
 			printf("帳號或密碼輸入錯誤\n");
-			printf("即將返回初始頁面...");
+			printf("即將返回登陸頁面...");
 			return 1;
 		}
 	}
@@ -358,7 +358,7 @@ int chat_friend() {
 	mptr=mhead;
 	//history 要設計 使用者名稱的導入
 	printf("\n============================\n");
-	printf("歡迎進入聊天大廳 %s \n...簡易版\n",optr->name);
+	printf("歡迎進入交友大廳 %s \n...簡易版\n",optr->name);
 	strcpy(name,optr->name);
 	printf("您的好友列表");
 	printf("\n----------------------------\n");
@@ -384,14 +384,15 @@ int chat_friend() {
 	yptr=fhead;
 	
 	while(yptr!=NULL){
-		if(strcmp(fname,yptr->fname)!=0 && yptr->fnext!=NULL){
+		if(strcmp(fname,yptr->fname)!=0 && yptr->fnext!=NULL){// bug 
 			yptr=yptr->fnext;		
 		}
 		if(yptr->fnext==NULL&&strcmp(fname,yptr->fname)!=0){
-			if(strcmp(name,fname)){
+			if(strcmp(name,fname)==0){
 				printf("不要跟自己說話,搞自閉啦!");
 			}else{
 				printf("\n您沒有此好友");
+				printf("將返回交友大廳");
 			}
 			break;
 		}
@@ -439,7 +440,6 @@ int chat_friend() {
 						}
 					}
 					printf(":%s\n",content);
-					printf("________________________________________________\n");
 				}
 			}
 		}
@@ -459,7 +459,8 @@ int delete_friend() {
 	yptr=fhead;
 	
 	printf("\n============================\n");
-	printf("歡迎進入聊天大廳%s\n...簡易版",optr->name);
+	printf("您好您是 %s",optr->name);
+	
 	strcpy(name,optr->name);
 	printf("您的好友列表");
 	printf("\n----------------------------\n");
@@ -500,7 +501,7 @@ int off_line(){//實作連線因該會要有ex:線上第幾人的問題 下線
 	if(strcmp(ohead->name,lptr->name)==0&&ohead->onoff==1){//上線者第一筆資料就是本地使用者//但不是是用者的可能性.... 
 		ohead=ohead->next;
 		lhead=lhead->lnext;
-		printf("%s %s",optr->name,lptr->name);
+	//	printf("%s %s",optr->name,lptr->name);
 		printf("雖然很難過,期待下次您的使用");
 		return 1;
 	}
