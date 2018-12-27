@@ -80,6 +80,7 @@ int main(void) {
 			default:
 				printf("\n拜託不要亂輸入好嗎=ˇ=，請重新輸入!\n");
 				printf("\n/////////////////////////我是分隔線/////////////////////////\n\n");
+				break;
 				
 		} 
 	}
@@ -106,8 +107,10 @@ int chatroom() {
 				break;
 			case(0):
 				return 0;
+				break;
 			default:
 				printf("無效的指令");
+				break;
 		}
 	}
 }
