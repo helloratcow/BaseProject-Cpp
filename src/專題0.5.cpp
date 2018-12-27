@@ -1,9 +1,13 @@
+//¤p§Ì¤£¤~ µ{¦¡¼g«ÜÅ¼½Ğ¨£½Ì ¦p¦³°İÃD¥i¥Hµo°İ
+//¦p¦³µ{¦¡½XÅŞ¿è°İÃD87%¬O¤p§Ì¦Ò¼{¤£©P²¦³º¬OÃä¼gÃä·Qªº«Ü¤j¾÷²v¦³¿òº| 
+//¥Ø«e­«·sµn¨Ï¥ÎªÌ«ábug³s³s...
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include<math.h>
 #include <string.h>
 
-struct userinf {
+struct userinf {//µù¥UªÌ¸ê®Æ(®w?) 
 	char name[10];
 	char account[20];
 	char passward[20];
@@ -13,52 +17,59 @@ struct userinf {
 userinf *newUser(char name[10],char account[20],char passward[20]);
 userinf *head=NULL;
 void printList();
-int insert_list();//è¨»å†Š æœ‰ä¸èƒ½é‡è¤‡å¸³è™Ÿ åç¨± å•é¡Œ 
-int landing();//ç™»é™¸  æœ‰ æ›äººç™»é™¸ olineUseræ²’æœ‰å¯«å®Œå–„çš„å•é¡Œ 
+int insert_list();//µù¥U ¦³¤£¯à­«½Æ±b¸¹ ¦WºÙ °İÃD 
+int landing();//µn³°  ¦³ ´«¤Hµn³° olineUser¨S¦³¼g§¹µ½ªº°İÃD 
 //-------------------------------//
-int add_friend();//å¥½å‹åˆ—è¡¨ ä¸æ‡‰è©²èƒ½é‡è¤‡çš„åˆ¤æ–·å¼å•é¡Œ 
-int chat_friend();//é‚„ä¸æ¸…æ¥šç¾æœ‰å•é¡Œ  ä½†é‚„æ²’åŠ å…¥ é»‘å–®orå¥½å‹ ç‹€æ…‹çš„åˆ¤æ–· 
-int delete_friend();// 
 int chatroom();
+int add_friend();//¦n¤Í¦Cªí ¤£À³¸Ó¯à­«½Æªº§PÂ_¦¡°İÃD 
+int chat_friend();//ÁÙ¤£²M·¡²{¦³°İÃD  ¦ıÁÙ¨S¥[¤J ¶Â³æor¦n¤Í ª¬ºAªº§PÂ_ 
+int delete_friend();// 
+int off_line();
 //-------------------------------//
-struct olineUser {//ç›®å‰ç•¶ä½œé¡ä¼¼æš«å­˜ç™»éŒ„è€…è³‡æ–™çš„ç©ºé–“ 
+struct olineUser {//¤W½uªºµn¿ıªÌ¸ê®Æ(®w) 
 	char name[10];
 	char account[10];
 	int onoff; //1 online, 0 offline 
 	struct olineUser *next;
 };
-
 olineUser *newoluser(char name[10],char account[10],int onoff);
 olineUser *ohead=NULL;
 
-struct ynf {//ä½ éœ€è¦æœ‰äººå¯ä»¥èŠå¤©  å¥½å‹çš„table 
+struct localinfo{//³æ¯Â¥u¬ö¿ı·í«e¥Î¤áºİªº¸ê®Æ? 
 	char name[10];
-	char fname[10];//ä½ æœ‹å‹çš„åå­— 
-	int open_close;//1å¯èŠå¤© 0ä¸å¯èŠå¤© //å°šæœªåŠ å…¥ 
-	int count;//å¥½å‹ç·¨è™Ÿ?é †åº 
+	struct localinfo *lnext;
+};
+localinfo *templocalinfo(char name[10]);
+localinfo *lhead=NULL;
+
+struct ynf {//©Ò¦³µn¿ıªÌªº¦n¤Í¸ê®Æ(®w?) §A»İ­n¦³¤H¥i¥H²á¤Ñ  ¦n¤Íªºtable 
+	char name[10];
+	char fname[10];//§AªB¤Íªº¦W¦r 
+	int open_close;//1¥i²á¤Ñ 0¤£¥i²á¤Ñ //©|¥¼¥[¤J 
+	int count;//¦n¤Í½s¸¹?¶¶§Ç 
 	struct ynf *fnext;
 };
 ynf *newfriend(char name[10],char fname[10],int open_close,int count);
 ynf *fhead=NULL;
 
-struct message { //æŠŠèŠå¤©çš„è¨Šæ¯å¡é€²å»
-	char name[10];//èª°ç•™çš„è¨Šæ¯ 
+struct message { //©Ò¦³ªºµn¿ıªÌ¹ï¦n¤Íªº²á¤Ñªº°T®§ ¸ê®Æ(®w?) 
+	char name[10];//½Ö¯dªº°T®§ 
 	//int online;char fname[10]
 	int line;
 	char content[200];
-	char fname[10];//èˆ‡èª°èŠå¤©çš„è¨Šæ¯ 
+	char fname[10];//»P½Ö²á¤Ñªº°T®§ 
 	struct message *next;
 };
-
 message *newmsg(char name[10],char fname[10],int line,char content[200]);
 message *mhead=NULL;
+
 int main(void) {
 	int select=0;
-	printf("æ„Ÿè¬ä½¿ç”¨æ­¤ç³»çµ±");
+	printf("·PÁÂ¨Ï¥Î¦¹¨t²Î");
 	for(int k=0;;k++) {
 		
 		printf("\n============================\n");
-		printf("è«‹é¸æ“‡:\n1.æ–°å¢å¸³æˆ¶\n2.ç™»å…¥ç”¨æˆ¶\n0.é›¢é–‹\n\n") ;
+		printf("½Ğ¿ï¾Ü:\n1.·s¼W±b¤á\n2.µn¤J¥Î¤á\n0.Â÷¶}\n\n") ;
 		scanf("%d",&select);
 		switch(select) {
 			case(1):
@@ -68,7 +79,7 @@ int main(void) {
 				landing();
 				break;
 			default:
-				printf("ç„¡æ•ˆçš„æŒ‡ä»¤");
+				printf("µL®Äªº«ü¥O");
 				break;
 			case(0):
 				return 0;
@@ -81,7 +92,7 @@ int chatroom() {
 	
 	for(int k=0;;k++) {
 		printf("\n============================\n");
-		printf("è«‹é¸æ“‡:\n1.æŸ¥æ‰¾å¥½å‹\n2.èŠå¤©\n3.åˆªé™¤\n0.é›¢é–‹(è¼¸å…¥æ•¸å­—ä»¥åŸ·è¡Œ)\n\n") ;
+		printf("½Ğ¿ï¾Ü:\n1.¬d§ä¦n¤Í\n2.²á¤Ñ\n3.§R°£\n0.Â÷¶}(¿é¤J¼Æ¦r¥H°õ¦æ)\n\n") ;
 		scanf(" %d",&select);
 		switch(select) {
 			case(1):
@@ -94,10 +105,10 @@ int chatroom() {
 				delete_friend();
 				break;
 			case(0):
-			//	off_line();
+				off_line();
 				return 0;
 			default:
-				printf("ç„¡æ•ˆçš„æŒ‡ä»¤");
+				printf("µL®Äªº«ü¥O");
 		}
 	}
 }
@@ -120,6 +131,12 @@ olineUser *newoluser(char name[10],char account[10],int onoff) {
 	temp->onoff=onoff;
 	temp->next=NULL;
 
+	return temp;
+}
+localinfo *templocalinfo(char name[10]){//¥»¦aºİ¦s¨ú¤è¦¡´ú¸Õ¤¤... 
+	localinfo *temp;
+	temp=(localinfo*)malloc(sizeof(localinfo));
+	strcpy(temp->name,name);
 	return temp;
 }
 ynf *newfriend(char name[10],char fname[10],int open_close,int count) {
@@ -145,18 +162,18 @@ message *newmsg(char name[10],char fname[10],int line,char content[200]) {
 	return temp;
 }
 
-void printList() {//æ¸¬è©¦ç”¨ 
+void printList() {//¦L¥X¥i¥[¤J¦n¤Í¥Î 
 	userinf *ptr;
 	ptr=head;
 //	printf("\n============================\n");
 	while(ptr!=NULL) {
-		printf("å¸³è™Ÿ:%s åç¨±:%s \n",ptr->account,ptr->name);//
+		printf("±b¸¹:%s ¦WºÙ:%s \n",ptr->account,ptr->name);//
 		ptr=ptr->next;
 	}
 //	printf("\n============================\n");
 }
 
-int insert_list() {//å¯ä»¥é‡è¤‡å¸³å¯†æ˜¯ä¸€å€‹å•é¡Œ 
+int insert_list() {//¥i¥H­«½Æ±b±K¬O¤@­Ó°İÃD  °j°é¦n¹³¥i¥H¦A­×§ï 
 	int inselect = 0,exit=0;
 	while(inselect!=1) {
 
@@ -166,11 +183,11 @@ int insert_list() {//å¯ä»¥é‡è¤‡å¸³å¯†æ˜¯ä¸€å€‹å•é¡Œ
 
 		userinf *ptr;
 		printf("\n============================\n");
-		printf("å¸³è™Ÿ:");
+		printf("±b¸¹:");
 		scanf("%s",&account);
-		printf("å¯†ç¢¼:");
+		printf("±K½X:");
 		scanf("%s",&passward);
-		printf("ç”¨æˆ¶åç¨±:");
+		printf("¥Î¤á¦WºÙ:");
 		scanf("%s",&name);
 		if(head==NULL) {
 			head=newUser(account,passward,name);
@@ -197,32 +214,44 @@ int landing() {
 	ptr=head;
 	olineUser *optr;
 	optr=ohead;
-	printf("è¼¸å…¥å¸³è™Ÿ:");
+	localinfo *lptr;
+	lptr=lhead;
+	printf("¿é¤J±b¸¹:");
 	scanf(" %s",account);
-	printf("è¼¸å…¥å¯†ç¢¼:");
+	printf("¿é¤J±K½X:");
 	scanf(" %s",passward);
 	if(ptr==NULL) {
-		printf("ç›®å‰æ²’æœ‰ä»»ä½•ç”¨æˆ¶è¨»å†Šæ­¤ç¨‹å¼...qq\n");
-		printf("å³å°‡è¿”å›åˆå§‹é é¢...");
+		printf("¥Ø«e¨S¦³¥ô¦ó¥Î¤áµù¥U¦¹µ{¦¡...qq\n");
+		printf("§Y±Nªğ¦^µn³°­¶­±...");
 		return 1;
 	}
 	while(strcmp(account,ptr->account) != 0 &&ptr->next!=NULL) {
 		ptr=ptr->next;
 	}
-	if(ptr->next==NULL&&strcmp(account,ptr->account) != 0) {//å¦‚æœåˆ¤æ–·å¸³è™ŸéŒ¯èª¤æœƒå…ˆè·³é€™å€‹ 
-		printf("å¸³è™Ÿæˆ–å¯†ç¢¼è¼¸å…¥éŒ¯èª¤\n");
-		printf("å³å°‡è¿”å›åˆå§‹é é¢...");
+	if(ptr->next==NULL&&strcmp(account,ptr->account) != 0) {//¦pªG§PÂ_±b¸¹¿ù»~·|¥ı¸õ³o­Ó 
+		printf("±b¸¹©Î±K½X¿é¤J¿ù»~\n");
+		printf("§Y±Nªğ¦^µn³°­¶­±...");
 	}
 	if(strcmp(account,ptr->account) == 0) {
 		if(strcmp(passward,ptr->passward) == 0) {
-			printf("welcome %s\n",ptr->name);
-			strcpy(temp,ptr->name);
-			//printf("æ¸¬è©¦%s",temp);
+			printf("\n----------------\n");
+			printf("Welcome %s\n",ptr->name);
+			strcpy(temp,ptr->name);//µn³° ¥»¦aºİ¨Ï¥ÎªÌ 
+			//printf("temp´ú¸Õ%s\n",temp);
+			printf("\n----------------\n");
 			
+			if(lhead==NULL){
+				lhead=templocalinfo(ptr->name);
+				//printf("¹ê»Ú´ú¸Õ%s",lhead->name);
+			}else{
+				lptr=lhead;
+				lhead=templocalinfo(ptr->name);
+				//printf("¹ê»Ú´ú¸Õ%s",lhead->name);
+			}	
 			if(ohead==NULL) {
 				ohead=newoluser(temp,ptr->account,1);
-				//printf("æ¸¬è©¦%s",ohead->name);
-			} else {//å‹å¼ 
+				//printf("´ú¸Õ%s",ohead->name);
+			} else {//«¬¦¡ 
 				optr=ohead;
 				while(optr->next!=NULL) {
 					optr=optr->next;
@@ -232,8 +261,8 @@ int landing() {
 			}
 			chatroom();
 		} else {
-			printf("å¸³è™Ÿæˆ–å¯†ç¢¼è¼¸å…¥éŒ¯èª¤\n");
-			printf("å³å°‡è¿”å›åˆå§‹é é¢...");
+			printf("±b¸¹©Î±K½X¿é¤J¿ù»~\n");
+			printf("§Y±Nªğ¦^µn³°­¶­±...");
 			return 1;
 		}
 	}
@@ -243,27 +272,28 @@ int add_friend() {
 
 	olineUser *optr;
 	optr=ohead;
+	
 	ynf *yptr;
 	yptr=fhead;
 	
 	userinf *ptr;
 	ptr=head;
 	
-	char name[10];//æ˜¯èª°è¦ç™»å…¥å¥½å‹ 
+	char name[10];//¬O½Ö­nµn¤J¦n¤Í 
 	char account[10];
 	int oc=0,c=0;
-	printf("æ‚¨æ˜¯%s\n",optr->name);//é‚„è¦ä¿®ä¸€ä¸‹é‚è¼¯ æ­¤ç‚ºå®šæ•¸ 
+	printf("±z¬O%s\n",optr->name);//µn¿ıªÌ¤~¯à¥[¦n¤Í ÁÙ­n­×¤@¤UÅŞ¿è ¦¹¬°©w¼Æ 
 	strcpy(name,optr->name);
-	printf("å¯åŠ å…¥åå–®:");
+	printf("¥i¥[¤J¦W³æ:");
 	printf("\n----------------------------\n");
 	while(ptr!=NULL) {
 		ptr=ptr->next;
-		if(strcmp(name,ptr->name)==0){//é€™æ˜¯ç™»éŒ„è€…æœ¬èº«çš„è³‡è¨Šä¸å› è©²å‡ºç¾ 
+		if(strcmp(name,ptr->name)==0){//³o¬Oµn¿ıªÌ¥»¨­ªº¸ê°T¤£¦]¸Ó¥X²{ 
 			ptr=ptr->next;
 		}else{
-			printf("å¸³è™Ÿ:%s åç¨±:%s \n",ptr->account,ptr->name);
+			printf("±b¸¹:%s ¦WºÙ:%s \n",ptr->account,ptr->name);
 			if(ptr->next==NULL){
-				printf("ä»¥ä¸Šçµæœ\n");
+				printf("\n¥H¤Wµ²ªG");
 			break;
 			}	
 		}
@@ -271,21 +301,21 @@ int add_friend() {
 	}
 	printf("\n----------------------------\n");
 	
-	printf("è«‹è¼¸å…¥æ‚¨æƒ³åŠ å…¥çš„å¥½å‹å¸³è™Ÿ:");
+	printf("½Ğ¿é¤J±z·Q¥[¤Jªº¦n¤Í'±b¸¹'!: ");
 	scanf("%s",account);
 	
 	ptr=head;
-	while(ptr!=NULL) {//åˆ¤æ–·è¼¸å…¥çš„æœ‰æ²’æœ‰åœ¨æ¸…å–®å…§ 
+	while(ptr!=NULL) {//§PÂ_¿é¤Jªº¦³¨S¦³¦b²M³æ¤º 
 		if(strcmp(account,ptr->account)!=0&&ptr->next!=NULL){
 		ptr=ptr->next;
 		}
 		if(ptr->next==NULL&&strcmp(account,ptr->account)!=0){
-		printf("æŸ¥ç„¡æ­¤äºº\n");
+		printf("¬dµL¦¹¤H\n");
 		break;
 		}
-		if(strcmp(account,ptr->account)==0){//æ‰¾åˆ°äº† 
-			if(strcmp(name,ptr->name)==0){//æ²’åˆ¤æ–·åˆ° 
-				printf("é€™æ˜¯æ‚¨çš„å¸³è™Ÿä¸è¦ç©å¼„æˆ‘!");
+		if(strcmp(account,ptr->account)==0){//§ä¨ì¤F 
+			if(strcmp(name,ptr->name)==0){//§PÂ_¥´¦Û¤vªº¸ê°T 
+				printf("³o¬O±zªº±b¸¹¤£­nª±§Ë§Ú!\n");
 				break;
 			}else{
 				if(fhead==NULL){
@@ -304,7 +334,7 @@ int add_friend() {
 				yptr->fnext=newfriend(name,ptr->name,oc,c);
 				yptr->fnext==NULL;
 			}
-			printf("ä½ å¯ä»¥èˆ‡%sèŠå¤©å›‰!\n",ptr->name);
+			printf("§A¥i¥H»P '%s' ²á¤ÑÅo!\n",ptr->name);
 			printf("\n----------------------------\n");
 			break;
 			}	
@@ -312,7 +342,7 @@ int add_friend() {
 	}	
 }
 int chat_friend() {
-	int meslock = 1;//1å¯ä»¥å‚³è¼¸ 0ä¸å¯ä»¥å‚³è¼¸ 0.5; 
+	int meslock = 1;//1¥i¥H¶Ç¿é 0¤£¥i¥H¶Ç¿é 0.5; 
 	char content[200];
 	char name[10];
 	char fname[10];
@@ -326,13 +356,21 @@ int chat_friend() {
 	
 	message *mptr;
 	mptr=mhead;
-	//history è¦è¨­è¨ˆ ä½¿ç”¨è€…åç¨±çš„å°å…¥
+	//history ­n³]­p ¨Ï¥ÎªÌ¦WºÙªº¾É¤J
 	printf("\n============================\n");
-	printf("æ­¡è¿é€²å…¥èŠå¤©å¤§å»³%s\n...ç°¡æ˜“ç‰ˆ",optr->name);
+	printf("Åwªï¶i¤J¥æ¤Í¤jÆU %s \n...Â²©öª©\n",optr->name);
 	strcpy(name,optr->name);
-	printf("æ‚¨çš„å¥½å‹åˆ—è¡¨");
+	printf("±zªº¦n¤Í¦Cªí");
 	printf("\n----------------------------\n");
-	while(yptr!=NULL){//æ²’æœ‰å¥½å‹è¦é€€å‡º (? 
+	if(yptr==NULL){
+		printf("±zÁÙ¨S¦³ªB¤Í¥i¥H²á¤Ñ,§Ö¥h¥[¤@­ÓªB¤Í§a!\n");
+		return 1;
+	}
+	while(yptr!=NULL){//¨S¦³¦n¤Í­n°h¥X (? 
+		if(strcmp(name,yptr->name)!=0&&yptr->fnext==NULL){
+			printf("±zÁÙ¨S¦³ªB¤Í¥i¥H²á¤Ñ,§Ö¥h¥[¤@­ÓªB¤Í§a!\n");
+			return 1;
+		}
 		if(strcmp(name,yptr->name)==0){
 		printf("%s\n",yptr->fname);
 		yptr=yptr->fnext;
@@ -341,28 +379,33 @@ int chat_friend() {
 		}
 	}
 	printf("\n----------------------------\n");
-	printf("è¼¸å…¥æ‚¨æƒ³å°è©±çš„å¥½å‹åç¨±:");
+	printf("¿é¤J±z·Q¹ï¸Üªº¦n¤Í¦WºÙ:");
 	scanf("%s",fname);
 	yptr=fhead;
 	
 	while(yptr!=NULL){
-		if(strcmp(fname,yptr->fname)!=0 && yptr->fnext!=NULL){
-			yptr=yptr->fnext;
+		if(strcmp(fname,yptr->fname)!=0 && yptr->fnext!=NULL){// bug 
+			yptr=yptr->fnext;		
 		}
 		if(yptr->fnext==NULL&&strcmp(fname,yptr->fname)!=0){
-			printf("æ‚¨æ²’æœ‰æ­¤å¥½å‹");
+			if(strcmp(name,fname)==0){
+				printf("¤£­n¸ò¦Û¤v»¡¸Ü,·d¦Û³¬°Õ!");
+			}else{
+				printf("\n±z¨S¦³¦¹¦n¤Í");
+				printf("±Nªğ¦^¥æ¤Í¤jÆU");
+			}
 			break;
 		}
 		if(strcmp(fname,yptr->fname)==0){
-			printf("é–‹å§‹èˆ‡%så°è©±å§!",fname);
+			printf("¶}©l»P%s¹ï¸Ü§a!",fname);
 			printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-			printf("å¦‚æœè¦é›¢é–‹èŠå¤©å®¤ è«‹è¼¸å…¥'exit'\n");
+			printf("¦pªG­nÂ÷¶}²á¤Ñ«Ç ½Ğ¿é¤J'exit'\n");
 			if(mptr!=NULL){
-				printf("éå»çš„èŠå¤©ç´€éŒ„\n");
+				printf("¹L¥hªº²á¤Ñ¬ö¿ı\n");
 				printf("________________________________________________\n");
 			}
 			while(mptr!=NULL){
-				if(strcmp(name,mptr->name)==0&&strcmp(fname,mptr->fname)==0){//åˆ¤æ–·æ­¤è¨Šæ¯æ˜¯å¦ç‚ºç™»å…¥è€…----//åˆ¤æ–·æ˜¯å¦ç‚ºç•¶å‰èŠå¤©çš„å°è±¡çš„å°è©± 
+				if(strcmp(name,mptr->name)==0&&strcmp(fname,mptr->fname)==0){//§PÂ_¦¹°T®§¬O§_¬°µn¤JªÌ----//§PÂ_¬O§_¬°·í«e²á¤Ñªº¹ï¶Hªº¹ï¸Ü 
 					printf("                               %s\n",mptr->content);
 					mptr=mptr->next;
 				}else if(strcmp(fname,mptr->name)==0&&strcmp(name,mptr->fname)){
@@ -374,11 +417,11 @@ int chat_friend() {
 			}
 			for(int k=0;;k++) {
 				printf("________________________________________________\n");
-				printf("è¼¸å…¥æ‚¨è¦èªªçš„è©±:");
+				printf("¿é¤J±z­n»¡ªº¸Ü:");
 				scanf("%s",content);
 				if(strcmp(exit, content) == 0) {
 					printf("\n");
-					printf("å³å°‡é›¢é–‹èŠå¤©å®¤...");
+					printf("§Y±NÂ÷¶}²á¤Ñ«Ç...");
 					return 1;
 					printf("\n============================\n");
 				} else { 
@@ -397,7 +440,6 @@ int chat_friend() {
 						}
 					}
 					printf(":%s\n",content);
-					printf("________________________________________________\n");
 				}
 			}
 		}
@@ -405,30 +447,84 @@ int chat_friend() {
 	
 }
 int delete_friend() {
+	char name[10];
+	char fname[10];
 	userinf *ptr;
 	ptr=head;
-	printf("æ‚¨çš„å¥½å‹ç›®éŒ„");
-	printf("\n----------------------------\n");
-	while(ptr!=NULL) {
-
-		printf("å¸³è™Ÿ:%s åç¨±:%s \n",ptr->account,ptr->name);//
-		ptr=ptr->next;
-	}
-	printf("\n-----------------------------\n");
-
-}
-int off_line(){//å¯¦ä½œé€£ç·šå› è©²æœƒè¦æœ‰ex:ç·šä¸Šç¬¬å¹¾äººçš„å•é¡Œ ä¸‹ç·š 
-	olineUser *optr;
-	optr=ohead;//ç›®å‰è¨­ä¸‹ç·šç‚º0ä¸Šç·šç‚º1 
 	
-	while(optr->onoff!=0 &&optr->next!=NULL){
+	olineUser *optr;
+	optr=ohead;
+	
+	ynf *yptr;
+	yptr=fhead;
+	
+	printf("\n============================\n");
+	printf("±z¦n±z¬O %s",optr->name);
+	
+	strcpy(name,optr->name);
+	printf("±zªº¦n¤Í¦Cªí");
+	printf("\n----------------------------\n");
+	while(yptr!=NULL){//¨S¦³¦n¤Í­n°h¥X (? 
+		if(strcmp(name,yptr->name)==0){
+		printf("%s\n",yptr->fname);
+		yptr=yptr->fnext;
+		}else {
+			yptr=yptr->fnext;
+		}
+	}
+	printf("\n----------------------------\n");
+	printf("¿é¤J±z·Q¶Â±¼ªº¦n¤Í¦WºÙ:");//ÁÙ¨S§PÂ_§¹!!! 
+	scanf("%s",fname);
+	yptr=fhead;
+	
+	while(yptr!=NULL){
+		if(strcmp(fname,yptr->fname)!=0 && yptr->fnext!=NULL){
+			yptr=yptr->fnext;
+		}
+		if(yptr->fnext==NULL&&strcmp(fname,yptr->fname)!=0){
+			printf("±z¨S¦³¦¹¦n¤Í");
+			break;
+		}
+		if(strcmp(fname,yptr->fname)==0){//¦pªG¬Û²Å¦X¶Â±¼ 
+			printf("¦¹«á¥Lªº°T®§±N¤£·|Åã¥Ü!\n");
+			break;
+		} 
+	}
+}
+int off_line(){//¹ê§@³s½u¦]¸Ó·|­n¦³ex:½u¤W²Ä´X¤Hªº°İÃD ¤U½u 
+	olineUser *optr;
+	optr=ohead;//¥Ø«e³]¤U½u¬°0¤W½u¬°1 
+	
+	localinfo *lptr;
+	lptr=lhead;
+	//if(ohead==NULL) ,if(ohead->onoff==0)//¤£¦]¸Óµo¥Í 
+	if(strcmp(ohead->name,lptr->name)==0&&ohead->onoff==1){//¤W½uªÌ²Ä¤@µ§¸ê®Æ´N¬O¥»¦a¨Ï¥ÎªÌ//¦ı¤£¬O¬O¥ÎªÌªº¥i¯à©Ê.... 
+		ohead=ohead->next;
+		lhead=lhead->lnext;
+	//	printf("%s %s",optr->name,lptr->name);
+		printf("ÁöµM«ÜÃø¹L,´Á«İ¤U¦¸±zªº¨Ï¥Î");
+		return 1;
+	}
+	while(strcmp(ohead->name,lptr->name)!=0 &&optr->next!=NULL){//µn¿ıªÌ»P¥»¦a¨Ï¥ÎªÌ¤£§k¦X 
 		optr=optr->next;
 	}
-	
-	
+	if(optr->next==NULL&&strcmp(optr->name,lptr->name)!=0){//¨ì³Ì«á¤@µ§µn¿ıªÌ¸ê®Æ³£¨S¦³§k¦Xªº¥»¦aºİ¸ê°T 
+		printf("out land error\n");//¤£½T©w·|¤£·|¦³³obug 
+	}
+	if(strcmp(optr->name,lptr->name)==0&&optr->onoff==1){//¥»¦aºİ¸ê°T»Pµn¿ıªÌ¸ê°T¬Û¦P¥B¬°¤W½uª¬ºA 
+		optr->next=optr->next->next;
+		lhead=NULL;
+		printf("%s %s",optr->name,lptr->name);
+		printf("ÁöµM«ÜÃø¹L,´Á«İ¤U¦¸±zªº¨Ï¥Î");
+		return 1;
+	}else{
+		printf("bug¬OÔ£©O...\n");
+		return 1;
+	}
 /*	if(optr->next==NULL&&optr->num!=num){
-		printf("æ‰¾ä¸åˆ°%d\n",);
+		printf("§ä¤£¨ì%d\n",);
 		return 1;
 		}
 */	
 }
+
