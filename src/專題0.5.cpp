@@ -13,27 +13,27 @@ struct userinf {
 userinf *newUser(char name[10],char account[20],char passward[20]);
 userinf *head=NULL;
 void printList();
-int insert_list();
-int landing();
-int search_list();
+int insert_list();//註冊 有不能重複帳號 名稱 問題 
+int landing();//登陸  有 換人登陸 olineUser沒有寫完善的問題 
 //-------------------------------//
-int add_friend();
-int chat_friend();
-int delete_friend();
+int add_friend();//好友列表 不應該能重複的判斷式問題 
+int chat_friend();//還不清楚現有問題  但還沒加入 黑單or好友 狀態的判斷 
+int delete_friend();//還沒建設 
 int chatroom();
 //-------------------------------//
 struct olineUser {//目前當作類似暫存登錄者資料的空間 
 	char name[10];
 	char account[10];
+	int onoff;
 	struct olineUser *next;
 };
 
 olineUser *newoluser(char name[10],char account[10]);
 olineUser *ohead=NULL;
 
-struct ynf {
+struct ynf {//你需要有人可以聊天  好友的table 
 	char name[10];
-	char fname[10];
+	char fname[10];//你朋友的名字 
 	int open_close;//1可聊天 0不可聊天 
 	int count;//好友編號?順序 
 	struct ynf *fnext;
@@ -42,14 +42,15 @@ ynf *newfriend(char name[10],char fname[10],int open_close,int count);
 ynf *fhead=NULL;
 
 struct message { //把聊天的訊息塞進去
-	char name[10];
-	//int online;
+	char name[10];//誰留的訊息 
+	//int online;char fname[10]
 	int line;
 	char content[200];
+	char fname[10];//與誰聊天的訊息 
 	struct message *next;
 };
 
-message *newmsg(char name[10],int line,char content[200]);
+message *newmsg(char name[10],char fname[10],int line,char content[200]);
 message *mhead=NULL;
 int main(void) {
 	int select=0;
@@ -134,11 +135,12 @@ ynf *newfriend(char name[10],char fname[10],int open_close,int count) {
 
 	return temp;
 }
-message *newmsg(char name[10],int line,char content[200]) {
+message *newmsg(char name[10],char fname[10],int line,char content[200]) {
 	message *temp;
 	temp=(message*)malloc(sizeof(message));
 	strcpy(temp->name,name);
 	temp->line=line;
+	strcpy(temp->fname,fname);
 	strcpy(temp->content,content);
 	temp->next=NULL;
 
@@ -150,7 +152,7 @@ void printList() {
 	ptr=head;
 //	printf("\n============================\n");
 	while(ptr!=NULL) {
-	//	printf("帳號:%s 名稱:%s \n",ptr->account,ptr->name);//
+		printf("帳號:%s 名稱:%s \n",ptr->account,ptr->name);//
 		ptr=ptr->next;
 	}
 //	printf("\n============================\n");
@@ -184,7 +186,7 @@ int insert_list() {//可以重複帳密是一個問題
 			ptr->next=newUser(account,passward,name);
 			ptr->next==NULL;
 		}
-		printList();
+		//printList();
 		return 1;
 	}
 }
@@ -232,6 +234,7 @@ int landing() {
 				}
 				optr->next=newoluser(temp,ptr->account);
 				optr->next==NULL;
+				printf("測試%s",optr->name);
 			}
 			chatroom();
 		} else {
@@ -343,9 +346,12 @@ int chat_friend() {
 		}
 	}
 	printf("\n----------------------------\n");
-	printf("輸入您想對話的好友名稱");
+	printf("輸入您想對話的好友名稱:");
 	scanf("%s",fname);
 	yptr=fhead;
+	if(yptr==NULL){
+		printf("趕快去加個好友聊天吧!");
+	}
 	while(yptr!=NULL){
 		if(strcmp(fname,yptr->fname)!=0 && yptr->fnext!=NULL){
 			yptr=yptr->fnext;
@@ -359,14 +365,14 @@ int chat_friend() {
 			printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 			printf("如果要離開聊天室 請輸入'exit'\n");
 			if(mptr!=NULL){
-				printf("過去的聊天紀錄");
+				printf("過去的聊天紀錄\n");
 				printf("________________________________________________\n");
 			}
 			while(mptr!=NULL){
-				if(strcmp(name,mptr->name)==0){
+				if(strcmp(name,mptr->name)==0&&strcmp(fname,mptr->fname)==0){//判斷此訊息是否為登入者----//尚未判斷是否為當前聊天的對象的對話 
 					printf("                               %s\n",mptr->content);
 					mptr=mptr->next;
-				}else if(strcmp(fname,mptr->name)!=0){
+				}else if(strcmp(fname,mptr->name)==0&&strcmp(name,mptr->fname)){
 					printf("%s:%s\n",mptr->name,mptr->content);
 					mptr=mptr->next;
 				}else{
@@ -386,14 +392,14 @@ int chat_friend() {
 					if(meslock==1) {//	loadmeg(content);
 						if(mhead==NULL){
 							line=1;
-							mhead=newmsg(name,line,content);
+							mhead=newmsg(name,fname,line,content);
 						}else{
 							mptr=mhead;
 							while(mptr->next!=NULL){
 								mptr=mptr->next;
 								line++;
 							}
-							mptr->next=newmsg(name,line,content);
+							mptr->next=newmsg(name,fname,line,content);
 							mptr->next==NULL; 
 						}
 					}
