@@ -1,4 +1,4 @@
-//小弟不才 程式寫很髒請見諒 如有問題可以發問
+﻿//小弟不才 程式寫很髒請見諒 如有問題可以發問
 //如有程式碼邏輯問題87%是小弟考慮不周畢竟是邊寫邊想的很大機率有遺漏 
 //目前重新登使用者後bug連連...
  
@@ -18,7 +18,7 @@ userinf *newUser(char name[10],char account[20],char passward[20]);
 userinf *head=NULL;
 void printList();
 int insert_list();//註冊 有不能重複帳號 名稱 問題 
-int landing();//登陸  有 換人登陸 olineUser沒有寫完善的問題 
+int landing();//登陸  有 換人登陸 olineUser沒有寫完善的問題
 //-------------------------------//
 int chatroom();
 int add_friend();//好友列表 不應該能重複的判斷式問題 
@@ -106,9 +106,10 @@ int chatroom() {
 				break;
 			case(0):
 				off_line();
-				return 0;
+				return 1;
 			default:
 				printf("無效的指令");
+				break;
 		}
 	}
 }
@@ -284,10 +285,10 @@ int add_friend() {
 	int oc=0,c=0;
 	printf("您是%s\n",optr->name);//登錄者才能加好友 還要修一下邏輯 此為定數 
 	strcpy(name,optr->name);
+	//printf(" %s",name);
 	printf("可加入名單:");
 	printf("\n----------------------------\n");
 	while(ptr!=NULL) {
-		ptr=ptr->next;
 		if(strcmp(name,ptr->name)==0){//這是登錄者本身的資訊不因該出現 
 			ptr=ptr->next;
 		}else{
@@ -295,9 +296,9 @@ int add_friend() {
 			if(ptr->next==NULL){
 				printf("\n以上結果");
 			break;
-			}	
+			}
+			ptr=ptr->next;	
 		}
-		
 	}
 	printf("\n----------------------------\n");
 	
@@ -358,25 +359,26 @@ int chat_friend() {
 	mptr=mhead;
 	//history 要設計 使用者名稱的導入
 	printf("\n============================\n");
-	printf("歡迎進入交友大廳 %s \n...簡易版\n",optr->name);
+	printf("歡迎進入聊天室 %s \n...簡易版\n",optr->name);
 	strcpy(name,optr->name);
 	printf("您的好友列表");
 	printf("\n----------------------------\n");
 	if(yptr==NULL){
+		printf("1");
 		printf("您還沒有朋友可以聊天,快去加一個朋友吧!\n");
 		return 1;
 	}
-	while(yptr!=NULL){//沒有好友要退出 (? 
+	while(yptr!=NULL){//
 		if(strcmp(name,yptr->name)!=0&&yptr->fnext==NULL){
+			printf("2");
 			printf("您還沒有朋友可以聊天,快去加一個朋友吧!\n");
 			return 1;
 		}
 		if(strcmp(name,yptr->name)==0){
 		printf("%s\n",yptr->fname);
-		yptr=yptr->fnext;
-		}else {
-			yptr=yptr->fnext;
 		}
+		yptr=yptr->fnext;
+		
 	}
 	printf("\n----------------------------\n");
 	printf("輸入您想對話的好友名稱:");
@@ -384,7 +386,7 @@ int chat_friend() {
 	yptr=fhead;
 	
 	while(yptr!=NULL){
-		if(strcmp(fname,yptr->fname)!=0 && yptr->fnext!=NULL){// bug 
+		if(strcmp(fname,yptr->fname)!=0 && yptr->fnext!=NULL){
 			yptr=yptr->fnext;		
 		}
 		if(yptr->fnext==NULL&&strcmp(fname,yptr->fname)!=0){
@@ -397,6 +399,7 @@ int chat_friend() {
 			break;
 		}
 		if(strcmp(fname,yptr->fname)==0){
+			yptr=fhead;
 			printf("開始與%s對話吧!",fname);
 			printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 			printf("如果要離開聊天室 請輸入'exit'\n");
@@ -407,13 +410,12 @@ int chat_friend() {
 			while(mptr!=NULL){
 				if(strcmp(name,mptr->name)==0&&strcmp(fname,mptr->fname)==0){//判斷此訊息是否為登入者----//判斷是否為當前聊天的對象的對話 
 					printf("                               %s\n",mptr->content);
-					mptr=mptr->next;
-				}else if(strcmp(fname,mptr->name)==0&&strcmp(name,mptr->fname)){
-					printf("%s:%s\n",mptr->name,mptr->content);
-					mptr=mptr->next;
-				}else{
-					mptr=mptr->next;
 				}
+				if(strcmp(fname,mptr->name)==0&&strcmp(name,mptr->fname)==0){
+					printf("%s:%s\n",mptr->name,mptr->content);
+				}
+				mptr=mptr->next;
+				
 			}
 			for(int k=0;;k++) {
 				printf("________________________________________________\n");
@@ -485,8 +487,9 @@ int delete_friend() {
 			printf("您沒有此好友");
 			break;
 		}
-		if(strcmp(fname,yptr->fname)==0){//如果相符合黑掉 
+		if(strcmp(fname,yptr->fname)==0){//如果相符合黑掉 //尚未做動作 
 			printf("此後他的訊息將不會顯示!\n");
+			
 			break;
 		} 
 	}
@@ -498,11 +501,11 @@ int off_line(){//實作連線因該會要有ex:線上第幾人的問題 下線
 	localinfo *lptr;
 	lptr=lhead;
 	//if(ohead==NULL) ,if(ohead->onoff==0)//不因該發生 
-	if(strcmp(ohead->name,lptr->name)==0&&ohead->onoff==1){//上線者第一筆資料就是本地使用者//但不是是用者的可能性.... 
-		ohead=ohead->next;
-		lhead=lhead->lnext;
-	//	printf("%s %s",optr->name,lptr->name);
-		printf("雖然很難過,期待下次您的使用");
+	if(strcmp(optr->name,lptr->name)==0&&ohead->onoff==1){//上線者第一筆資料就是本地使用者//但不是是用者的可能性.... //重製head 
+		ohead=NULL;
+		lhead=NULL;
+		//printf("%s %s",lhead->name,ohead->name);
+		printf("\n雖然很難過,期待下次您的使用");
 		return 1;
 	}
 	while(strcmp(ohead->name,lptr->name)!=0 &&optr->next!=NULL){//登錄者與本地使用者不吻合 
@@ -521,9 +524,5 @@ int off_line(){//實作連線因該會要有ex:線上第幾人的問題 下線
 		printf("bug是啥呢...\n");
 		return 1;
 	}
-/*	if(optr->next==NULL&&optr->num!=num){
-		printf("找不到%d\n",);
-		return 1;
-		}
-*/	
+
 }
