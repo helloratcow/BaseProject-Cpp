@@ -18,23 +18,23 @@ int landing();//登陸  有 換人登陸 olineUser沒有寫完善的問題
 //-------------------------------//
 int add_friend();//好友列表 不應該能重複的判斷式問題 
 int chat_friend();//還不清楚現有問題  但還沒加入 黑單or好友 狀態的判斷 
-int delete_friend();//還沒建設 
+int delete_friend();// 
 int chatroom();
 //-------------------------------//
 struct olineUser {//目前當作類似暫存登錄者資料的空間 
 	char name[10];
 	char account[10];
-	int onoff;
+	int onoff; //1 online, 0 offline 
 	struct olineUser *next;
 };
 
-olineUser *newoluser(char name[10],char account[10]);
+olineUser *newoluser(char name[10],char account[10],int onoff);
 olineUser *ohead=NULL;
 
 struct ynf {//你需要有人可以聊天  好友的table 
 	char name[10];
 	char fname[10];//你朋友的名字 
-	int open_close;//1可聊天 0不可聊天 
+	int open_close;//1可聊天 0不可聊天 //尚未加入 
 	int count;//好友編號?順序 
 	struct ynf *fnext;
 };
@@ -77,11 +77,7 @@ int main(void) {
 }
 
 int chatroom() {
-	int enter=0,select=1,reback=1;
-	char content[200];
-	char exit[]= "exit";
-	
-	
+	int select=1;
 	
 	for(int k=0;;k++) {
 		printf("\n============================\n");
@@ -98,6 +94,7 @@ int chatroom() {
 				delete_friend();
 				break;
 			case(0):
+			//	off_line();
 				return 0;
 			default:
 				printf("無效的指令");
@@ -115,11 +112,12 @@ userinf *newUser(char account[20],char passward[20],char name[10]) {
 
 	return temp;
 }
-olineUser *newoluser(char name[10],char account[10]) {
+olineUser *newoluser(char name[10],char account[10],int onoff) {
 	olineUser *temp;
 	temp=(olineUser*)malloc(sizeof(olineUser));
 	strcpy(temp->name,name);
 	strcpy(temp->account,account);
+	temp->onoff=onoff;
 	temp->next=NULL;
 
 	return temp;
@@ -147,7 +145,7 @@ message *newmsg(char name[10],char fname[10],int line,char content[200]) {
 	return temp;
 }
 
-void printList() {
+void printList() {//測試用 
 	userinf *ptr;
 	ptr=head;
 //	printf("\n============================\n");
@@ -190,11 +188,8 @@ int insert_list() {//可以重複帳密是一個問題
 		return 1;
 	}
 }
-
 int landing() {
 	printf("\n============================\n");
-	///int	enter=0;
-	///while(enter!=1){
 	char temp[10];
 	char account[20];
 	char passward[20];
@@ -225,16 +220,15 @@ int landing() {
 			//printf("測試%s",temp);
 			
 			if(ohead==NULL) {
-				ohead=newoluser(temp,ptr->account);
+				ohead=newoluser(temp,ptr->account,1);
 				//printf("測試%s",ohead->name);
 			} else {//型式 
 				optr=ohead;
 				while(optr->next!=NULL) {
 					optr=optr->next;
 				}
-				optr->next=newoluser(temp,ptr->account);
+				optr->next=newoluser(temp,ptr->account,1);
 				optr->next==NULL;
-				printf("測試%s",optr->name);
 			}
 			chatroom();
 		} else {
@@ -337,7 +331,7 @@ int chat_friend() {
 	strcpy(name,optr->name);
 	printf("您的好友列表");
 	printf("\n----------------------------\n");
-	while(yptr!=NULL){
+	while(yptr!=NULL){//沒有好友要退出 (? 
 		if(strcmp(name,yptr->name)==0){
 		printf("%s\n",yptr->fname);
 		yptr=yptr->fnext;
@@ -349,9 +343,7 @@ int chat_friend() {
 	printf("輸入您想對話的好友名稱:");
 	scanf("%s",fname);
 	yptr=fhead;
-	if(yptr==NULL){
-		printf("趕快去加個好友聊天吧!");
-	}
+	
 	while(yptr!=NULL){
 		if(strcmp(fname,yptr->fname)!=0 && yptr->fnext!=NULL){
 			yptr=yptr->fnext;
@@ -369,7 +361,7 @@ int chat_friend() {
 				printf("________________________________________________\n");
 			}
 			while(mptr!=NULL){
-				if(strcmp(name,mptr->name)==0&&strcmp(fname,mptr->fname)==0){//判斷此訊息是否為登入者----//尚未判斷是否為當前聊天的對象的對話 
+				if(strcmp(name,mptr->name)==0&&strcmp(fname,mptr->fname)==0){//判斷此訊息是否為登入者----//判斷是否為當前聊天的對象的對話 
 					printf("                               %s\n",mptr->content);
 					mptr=mptr->next;
 				}else if(strcmp(fname,mptr->name)==0&&strcmp(name,mptr->fname)){
@@ -424,8 +416,21 @@ int delete_friend() {
 	printf("\n-----------------------------\n");
 
 }
-	/*	userinf user1 = {"Hoby", "d001", "0001", 1234567};
-		userinf user2 = {"Alice", "d002", "0002", 6666677};
+int off_line(){//實作連線因該會要有ex:線上第幾人的問題 下線 
+	olineUser *optr;
+	optr=ohead;//目前設下線為0上線為1 
+	
+	while(optr->onoff!=0 &&optr->next!=NULL){
+		optr=optr->next;
+	}
+/*	if(optr->next==NULL&&optr->num!=num){
+		printf("找不到%d\n",);
+		return 1;
+		}
+*/	
+}
+	/*	userinf user1 = {"Hoby", "d001", "0001"};
+		userinf user2 = {"Alice", "d002", "0002"};
 		printf("搜尋可黑單的好友中...");
 		printf("\n============================\n");
 		while(reback){
