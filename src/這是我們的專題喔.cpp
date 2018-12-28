@@ -3,7 +3,6 @@
 #include<math.h>
 #include <string.h>
 
-char up_acc[30] = "",up_pwd[10] = "";//註冊的帳號密碼
 
 struct userinf {
 	char name[10];
@@ -18,6 +17,9 @@ void printList();
 int insert_list();
 int landing();
 int search_list();
+void sign_up();
+void sign_in();
+int judgement();
 //-------------------------------//
 void add_friend();
 void chat_friend();
@@ -80,7 +82,6 @@ int main(void) {
 			default:
 				printf("\n拜託不要亂輸入好嗎=ˇ=，請重新輸入!\n");
 				printf("\n/////////////////////////我是分隔線/////////////////////////\n\n");
-				break;
 				
 		} 
 	}
@@ -107,10 +108,8 @@ int chatroom() {
 				break;
 			case(0):
 				return 0;
-				break;
 			default:
 				printf("無效的指令");
-				break;
 		}
 	}
 }
@@ -392,40 +391,65 @@ void delete_friend() {
 			printf("如要離開請輸入'0'，否則隨意輸入繼續執行\n");
 			scanf("%d",&reback);*/
 		}
+		
 void sign_up(){//註冊 
+	char name[10],account[20],password[20];
+	userinf *ptr;
 	printf("\n/////////////////////////我是分隔線/////////////////////////\n\n");
 	printf("\n歡迎使用聊天室註冊系統\n\n");
 	
-		printf("請輸入用戶名稱:");//用戶名稱輸入
-		scanf("%s",name); 
-		
 		printf("\n請輸入帳號:");//帳號輸入 
-		scanf("%s",up_acc);
+		scanf("%s",&account);
 		
 		printf("\n請輸入密碼:");//密碼輸入 
-		scanf("%s",up_pwd);
+		scanf("%s",&password);
 		
+		printf("請輸入用戶名稱:");//用戶名稱輸入
+		scanf("%s",&name);
 		
-		printf("\n\n親愛的%s，已經註冊好囉~您的帳號為%s，密碼為%s\n",name,up_acc,up_pwd);
+		if(head == NULL){//如果此註冊是第一個帳號 
+			head = newUser(account,password,name);
+			printf("註冊完成\n");
+		}
+		else{
+			ptr = head;
+			while(ptr->next != NULL){//移到最後一個帳號 
+				ptr = ptr->next;
+			}
+			ptr->next = newUser(account,password,name);//在最後一個帳號後面再新增一個剛註冊的帳號 
+			printf("註冊完成\n");
+		}
 		
 		printf("\n/////////////////////////我是分隔線/////////////////////////\n\n");
 }
 
 void sign_in(){//登入 
+	char name[10],account[20],password[20];
 	printf("\n/////////////////////////我是分隔線/////////////////////////\n");
 	while(1){
 		printf("\n\n歡迎使用聊天室登入系統\n\n");
 		printf("\t請輸入帳號:");
-		scanf("%s",account);
+		scanf("%s",&account);
 		
 		printf("\n\t請輸入密碼:");
 		scanf("%s",password);
 		
-		if(strcmp(up_acc,account) == 0 && strcmp(up_pwd,password) == 0){//利用strcmp判斷註冊及登入時帳號及密碼是否相等
+		ptr = head;
+		if(ptr == NULL){//若沒註冊過任何帳號則登入失敗 
+			printf("\n\n你好像登入失敗了耶~再試一次吧!\n");
+			printf("\n/////////////////////////我是分隔線/////////////////////////\n");
+		}
+		else{
+			while(strcmp(account,ptr->account) != 0 || strcmp(password,ptr->password) != 0){
+				
+			}
+		}
+		
+		/*if(strcmp(up_acc,account) == 0 && strcmp(up_pwd,password) == 0){//利用strcmp判斷註冊及登入時帳號及密碼是否相等
 			printf("\n\n登入完成~~歡迎%s使用本聊天室~~\n",name); 
 			printf("\n/////////////////////////我是分隔線/////////////////////////\n");
 			break;
-		}
+		}*/
 		else{
 			printf("\n\n你好像登入失敗了耶~再試一次吧!\n");
 			printf("\n/////////////////////////我是分隔線/////////////////////////\n");
