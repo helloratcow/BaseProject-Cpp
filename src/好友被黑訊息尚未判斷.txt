@@ -54,13 +54,14 @@ ynf *fhead=NULL;
 
 struct message { //所有的登錄者對好友的聊天的訊息 資料(庫?) 
 	char name[10];//誰留的訊息 
-	//int online;char fname[10]
 	int line;
 	char content[200];
 	char fname[10];//與誰聊天的訊息 
+	int nf; 
+	int fn;
 	struct message *next;
 };
-message *newmsg(char name[10],char fname[10],int line,char content[200]);
+message *newmsg(char name[10],char fname[10],int line,char content[200],int nf,int fn);
 message *mhead=NULL;
 
 int main(void) {
@@ -403,7 +404,7 @@ int chat_friend() {
 			break;
 		}
 		if(strcmp(fname,yptr->fname)==0){
-			yptr=fhead;
+			
 			printf("開始與%s對話吧!",fname);
 			printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 			printf("如果要離開聊天室 請輸入'exit'\n");
@@ -417,12 +418,13 @@ int chat_friend() {
 				if(strcmp(name,mptr->name)==0&&strcmp(fname,mptr->fname)==0){//判斷此訊息是否為登入者----//判斷是否為當前聊天的對象的對話 
 					printf("                               %s\n",mptr->content);
 				}
-				if(strcmp(fname,mptr->name)==0&&strcmp(name,mptr->fname)==0){
-					if(yptr->open_close=0){
+				if(strcmp(fname,mptr->name)==0&&strcmp(name,mptr->fname)==0){//好友的訊息 
+					/*if(yptr->open_close==0){這個打開會把好友訊息都砍了 
 						printf("");
 					}else{
 						printf("%s:%s\n",mptr->name,mptr->content);
-					}
+					}*/
+					printf("%s:%s\n",mptr->name,mptr->content);
 				}
 				mptr=mptr->next;
 			}
@@ -437,6 +439,18 @@ int chat_friend() {
 					printf("\n===============================================\n");
 				} else { 
 					if(meslock==1) {//	loadmeg(content);
+						/*if(mhead==NULL){//原本可以的尚未做聊天開關 
+							line=1;
+							mhead=newmsg(name,fname,line,content);
+						}else{
+							mptr=mhead;
+							while(mptr->next!=NULL){
+								mptr=mptr->next;
+								line++;
+							}
+							mptr->next=newmsg(name,fname,line,content);
+							mptr->next==NULL; 
+						}*/ 
 						if(mhead==NULL){
 							line=1;
 							mhead=newmsg(name,fname,line,content);
@@ -496,9 +510,9 @@ int delete_friend() {
 			break;
 		}
 		if(strcmp(fname,yptr->fname)==0){//如果相符合黑掉 //尚未做動作 
-		//	strcpy(yptr->open_close,0);
+			yptr->open_close=0;
 			printf("此後他的訊息將不會顯示!\n");//*newfriend(char name[10],char fname[10],int open_close,int count);
-			//printf("%s %s %d %d",yptr->name,yptr->fname,yptr->open_close,yptr->count);
+			printf("%s %s %d %d",yptr->name,yptr->fname,yptr->open_close,yptr->count);
 			break;
 		} 
 	}
