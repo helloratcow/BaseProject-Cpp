@@ -91,7 +91,7 @@ int chatroom() {
 	int select=1;
 	
 	for(int k=0;;k++) {
-		printf("\n============================\n");
+		printf("\n===============================================\n");
 		printf("請選擇:\n1.查找好友\n2.聊天\n3.刪除\n0.離開(輸入數字以執行)\n\n") ;
 		scanf(" %d",&select);
 		switch(select) {
@@ -269,7 +269,7 @@ int landing() {
 	}
 }
 int add_friend() {
-	printf("\n============================\n");
+	printf("\n===============================================\n");
 
 	olineUser *optr;
 	optr=ohead;
@@ -287,7 +287,7 @@ int add_friend() {
 	strcpy(name,optr->name);
 	//printf(" %s",name);
 	printf("可加入名單:");
-	printf("\n----------------------------\n");
+	printf("\n-----------------------------------------------\n");
 	while(ptr!=NULL) {
 		if(strcmp(name,ptr->name)==0){//這是登錄者本身的資訊不因該出現 
 			ptr=ptr->next;
@@ -300,7 +300,7 @@ int add_friend() {
 			ptr=ptr->next;	
 		}
 	}
-	printf("\n----------------------------\n");
+	printf("\n-----------------------------------------------\n");
 	
 	printf("請輸入您想加入的好友'帳號'!: ");
 	scanf("%s",account);
@@ -336,7 +336,7 @@ int add_friend() {
 				yptr->fnext==NULL;
 			}
 			printf("你可以與 '%s' 聊天囉!\n",ptr->name);
-			printf("\n----------------------------\n");
+			printf("\n-----------------------------------------------\n");
 			break;
 			}	
 		}	
@@ -348,7 +348,7 @@ int chat_friend() {
 	char name[10];
 	char fname[10];
 	char exit[]="exit";
-	int line=0;
+	int line=0,num=0;
 	ynf *yptr;
 	yptr=fhead;
 	
@@ -358,29 +358,33 @@ int chat_friend() {
 	message *mptr;
 	mptr=mhead;
 	//history 要設計 使用者名稱的導入
-	printf("\n============================\n");
+	printf("\n===============================================\n");
 	printf("歡迎進入聊天室 %s \n...簡易版\n",optr->name);
 	strcpy(name,optr->name);
 	printf("您的好友列表");
-	printf("\n----------------------------\n");
+	printf("\n-----------------------------------------------\n");
 	if(yptr==NULL){
 		printf("1");
-		printf("您還沒有朋友可以聊天,快去加一個朋友吧!\n");
+		printf("您還沒有好友可以聊天,快去加一個朋友來聊天吧!\n");
 		return 1;
 	}
 	while(yptr!=NULL){//
-		if(strcmp(name,yptr->name)!=0&&yptr->fnext==NULL){
-			printf("2");
-			printf("您還沒有朋友可以聊天,快去加一個朋友吧!\n");
-			return 1;
-		}
 		if(strcmp(name,yptr->name)==0){
-		printf("%s\n",yptr->fname);
+			printf("%s\n",yptr->fname);
+			num++;
+		}
+		if(strcmp(name,yptr->name)!=0&&yptr->fnext==NULL){
+			if(num=0){
+				printf("2");
+				printf("您還沒有好友可以聊天,快去加一個朋友來聊天吧!\n");
+				return 1;
+			}else{
+				printf("\n");
+			}
 		}
 		yptr=yptr->fnext;
-		
 	}
-	printf("\n----------------------------\n");
+	printf("\n-----------------------------------------------\n");
 	printf("輸入您想對話的好友名稱:");
 	scanf("%s",fname);
 	yptr=fhead;
@@ -401,7 +405,7 @@ int chat_friend() {
 		if(strcmp(fname,yptr->fname)==0){
 			yptr=fhead;
 			printf("開始與%s對話吧!",fname);
-			printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+			printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 			printf("如果要離開聊天室 請輸入'exit'\n");
 			if(mptr!=NULL){
 				printf("過去的聊天紀錄\n");
@@ -412,10 +416,13 @@ int chat_friend() {
 					printf("                               %s\n",mptr->content);
 				}
 				if(strcmp(fname,mptr->name)==0&&strcmp(name,mptr->fname)==0){
-					printf("%s:%s\n",mptr->name,mptr->content);
+					if(yptr->open_close=0){
+						printf("");
+					}else{
+						printf("%s:%s\n",mptr->name,mptr->content);
+					}
 				}
 				mptr=mptr->next;
-				
 			}
 			for(int k=0;;k++) {
 				printf("________________________________________________\n");
@@ -425,7 +432,7 @@ int chat_friend() {
 					printf("\n");
 					printf("即將離開聊天室...");
 					return 1;
-					printf("\n============================\n");
+					printf("\n===============================================\n");
 				} else { 
 					if(meslock==1) {//	loadmeg(content);
 						if(mhead==NULL){
@@ -441,12 +448,11 @@ int chat_friend() {
 							mptr->next==NULL; 
 						}
 					}
-					printf(":%s\n",content);
+					printf("                                 %s\n",content);
 				}
 			}
 		}
-	}
-	
+	}	
 }
 int delete_friend() {
 	char name[10];
@@ -460,7 +466,7 @@ int delete_friend() {
 	ynf *yptr;
 	yptr=fhead;
 	
-	printf("\n============================\n");
+	printf("\n===============================================\n");
 	printf("您好您是 %s",optr->name);
 	
 	strcpy(name,optr->name);
@@ -474,7 +480,7 @@ int delete_friend() {
 			yptr=yptr->fnext;
 		}
 	}
-	printf("\n----------------------------\n");
+	printf("\n-----------------------------------------------\n");
 	printf("輸入您想黑掉的好友名稱:");//還沒判斷完!!! 
 	scanf("%s",fname);
 	yptr=fhead;
@@ -488,8 +494,9 @@ int delete_friend() {
 			break;
 		}
 		if(strcmp(fname,yptr->fname)==0){//如果相符合黑掉 //尚未做動作 
-			printf("此後他的訊息將不會顯示!\n");
-			
+		//	strcpy(yptr->open_close,0);
+			printf("此後他的訊息將不會顯示!\n");//*newfriend(char name[10],char fname[10],int open_close,int count);
+			//printf("%s %s %d %d",yptr->name,yptr->fname,yptr->open_close,yptr->count);
 			break;
 		} 
 	}
