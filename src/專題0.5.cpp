@@ -374,12 +374,12 @@ int chat_friend() {
 			num++;
 		}
 		if(strcmp(name,yptr->name)!=0&&yptr->fnext==NULL){
-			if(num=0){
+			if(num==0){
 				printf("2");
 				printf("您還沒有好友可以聊天,快去加一個朋友來聊天吧!\n");
 				return 1;
 			}else{
-				printf("\n");
+				printf("\n以上結果\n");
 			}
 		}
 		yptr=yptr->fnext;
@@ -407,6 +407,8 @@ int chat_friend() {
 			printf("開始與%s對話吧!",fname);
 			printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 			printf("如果要離開聊天室 請輸入'exit'\n");
+			printf("當讀到空白鍵會跑下一行\n");
+			printf("\n\n");
 			if(mptr!=NULL){
 				printf("過去的聊天紀錄\n");
 				printf("________________________________________________\n");
