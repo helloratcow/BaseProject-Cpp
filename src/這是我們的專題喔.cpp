@@ -18,8 +18,7 @@ int insert_list();
 int landing();
 int search_list();
 void sign_up();
-void sign_in();
-int judgement();
+int sign_in();
 //-------------------------------//
 void add_friend();
 void chat_friend();
@@ -71,9 +70,8 @@ int main(void) {
 				sign_up();
 				break;
 			case 2:
-				if (judgement() == 1){
-					sign_in();
-				}
+				landing();
+				//sign_in();
 				break;
 			case 3:
 				printf("\n\n慢走不送，掰掰啦~\n");
@@ -201,7 +199,8 @@ int insert_list() {//可以重複帳密是一個問題
 }
 
 int landing() {
-	printf("\n============================\n");
+	printf("\n/////////////////////////我是分隔線/////////////////////////\n\n");
+	printf("歡迎使用聊天室登入系統\n\n");
 	///int	enter=0;
 	///while(enter!=1){
 	char temp[10];
@@ -211,13 +210,14 @@ int landing() {
 	ptr=head;
 	olineUser *optr;
 	optr=ohead;
-	printf("輸入帳號:");
+	printf("請輸入帳號:");
 	scanf(" %s",account);
-	printf("輸入密碼:");
+	printf("\n請輸入密碼:");
 	scanf(" %s",password);
 	if(ptr==NULL) {
-		printf("目前沒有任何用戶註冊此程式...qq\n");
-		printf("即將返回初始頁面...");
+		printf("\n\n目前沒有任何用戶註冊此程式...qq\n");
+		printf("即將返回初始頁面...\n\n");
+		printf("/////////////////////////我是分隔線/////////////////////////\n\n");
 		return 1;
 		///	enter=1;
 	}
@@ -225,13 +225,15 @@ int landing() {
 		ptr=ptr->next;
 	}
 	if(ptr->next==NULL&&strcmp(account,ptr->account) != 0) {
-		printf("帳號或密碼輸入錯誤\n");
+		printf("\n\n帳號或密碼輸入錯誤\n");
+		printf("即將返回初始頁面...\n\n");
+		printf("/////////////////////////我是分隔線/////////////////////////\n\n");
 		/*/printf("如要離開請輸入 1");
 		scanf("%d",&enter);/*/
 	}
 	if(strcmp(account,ptr->account) == 0) {
 		if(strcmp(password,ptr->password) == 0) {
-			printf("welcome %s\n",ptr->name);
+			printf("\n\n登入完成~~歡迎%s使用本聊天室~~\n",ptr->name);
 			strcpy(temp,ptr->name);
 			//printf("測試%s",temp);
 			
@@ -250,6 +252,8 @@ int landing() {
 			///	enter=1;
 		} else {
 			printf("帳號或密碼輸入錯誤\n");
+			printf("即將返回初始頁面...\n\n");
+			printf("/////////////////////////我是分隔線/////////////////////////\n\n");
 			return 1;
 			/*/	printf("如要離開請輸入 1");
 				scanf("%d",&enter);/*/
@@ -404,12 +408,12 @@ void sign_up(){//註冊
 		printf("\n請輸入密碼:");//密碼輸入 
 		scanf("%s",&password);
 		
-		printf("請輸入用戶名稱:");//用戶名稱輸入
+		printf("\n請輸入用戶名稱:");//用戶名稱輸入
 		scanf("%s",&name);
 		
 		if(head == NULL){//如果此註冊是第一個帳號 
 			head = newUser(account,password,name);
-			printf("註冊完成\n");
+			printf("\n\n註冊完成囉~~~\n");
 		}
 		else{
 			ptr = head;
@@ -423,9 +427,10 @@ void sign_up(){//註冊
 		printf("\n/////////////////////////我是分隔線/////////////////////////\n\n");
 }
 
-void sign_in(){//登入 
+/*int sign_in(){//登入 
 	char name[10],account[20],password[20];
-	printf("\n/////////////////////////我是分隔線/////////////////////////\n");
+	userinf *ptr;
+	printf("\n/////////////////////////我是分隔線/////////////////////////\n\n");
 	while(1){
 		printf("\n\n歡迎使用聊天室登入系統\n\n");
 		printf("\t請輸入帳號:");
@@ -437,19 +442,28 @@ void sign_in(){//登入
 		ptr = head;
 		if(ptr == NULL){//若沒註冊過任何帳號則登入失敗 
 			printf("\n\n你好像登入失敗了耶~再試一次吧!\n");
-			printf("\n/////////////////////////我是分隔線/////////////////////////\n");
+			printf("\n/////////////////////////我是分隔線/////////////////////////\n\n");
+			return 1;
 		}
 		else{
-			while(strcmp(account,ptr->account) != 0 || strcmp(password,ptr->password) != 0){
-				
+			while(ptr->next != NULL){
+				if(strcmp(account,ptr->account) != 0 || strcmp(password,ptr->password) != 0){//若輸入錯誤的帳號或密碼則往下一個節點搜尋 
+					ptr = ptr->next;
+				}
+				else{
+					printf("\n\n登入完成~~歡迎%s使用本聊天室~~\n",ptr->name);
+					break;
+				}
+				printf("\n\n你好像登入失敗了耶~再試一次吧!\n");
+				return 1;
 			}
 		}
 		
-		/*if(strcmp(up_acc,account) == 0 && strcmp(up_pwd,password) == 0){//利用strcmp判斷註冊及登入時帳號及密碼是否相等
+		if(strcmp(up_acc,account) == 0 && strcmp(up_pwd,password) == 0){//利用strcmp判斷註冊及登入時帳號及密碼是否相等
 			printf("\n\n登入完成~~歡迎%s使用本聊天室~~\n",name); 
 			printf("\n/////////////////////////我是分隔線/////////////////////////\n");
 			break;
-		}*/
+		}
 		else{
 			printf("\n\n你好像登入失敗了耶~再試一次吧!\n");
 			printf("\n/////////////////////////我是分隔線/////////////////////////\n");
@@ -457,13 +471,5 @@ void sign_in(){//登入
 		
 		
 	}
-}
+}*/
 
-int judgement(){//判斷此帳號是否有註冊 
-	if(strcmp(up_acc,"") == 0 && strcmp(up_pwd,"") == 0){////利用strcmp判斷此帳號及密碼是否與空字串相等
-		return 0;
-	}
-	else{
-		return 1;
-	}
-}
