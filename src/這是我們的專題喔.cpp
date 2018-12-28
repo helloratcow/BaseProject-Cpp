@@ -393,20 +393,31 @@ void delete_friend() {
 			scanf("%d",&reback);*/
 		}
 void sign_up(){//註冊 
+	char name[10],account[20],password[20];
+	userinf *ptr;
 	printf("\n/////////////////////////我是分隔線/////////////////////////\n\n");
 	printf("\n歡迎使用聊天室註冊系統\n\n");
 	
 		printf("請輸入用戶名稱:");//用戶名稱輸入
-		scanf("%s",name); 
+		scanf("%s",&name); 
 		
 		printf("\n請輸入帳號:");//帳號輸入 
-		scanf("%s",up_acc);
+		scanf("%s",&account);
 		
 		printf("\n請輸入密碼:");//密碼輸入 
-		scanf("%s",up_pwd);
+		scanf("%s",&password);
 		
-		
-		printf("\n\n親愛的%s，已經註冊好囉~您的帳號為%s，密碼為%s\n",name,up_acc,up_pwd);
+		if(head == NULL){//如果此註冊是第一個帳號 
+			head = newUser();
+			printf("註冊完成\n");
+		}
+		else{
+			while(ptr->next != NULL){//移到最後一個帳號 
+				ptr = ptr->next;
+			}
+			ptr->next = newUser();//在最後一個帳號後面再新增一個剛註冊的帳號 
+			printf("註冊完成\n");
+		}
 		
 		printf("\n/////////////////////////我是分隔線/////////////////////////\n\n");
 }
