@@ -152,7 +152,7 @@ ynf *newfriend(char name[10],char fname[10],int open_close,int count) {
 
 	return temp;
 }
-message *newmsg(char name[10],char fname[10],int line,char content[200]) {
+message *newmsg(char name[10],char fname[10],int line,char content[200],int nf,int fn) {
 	message *temp;
 	temp=(message*)malloc(sizeof(message));
 	strcpy(temp->name,name);
