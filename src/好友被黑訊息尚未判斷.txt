@@ -1,8 +1,4 @@
-﻿//小弟不才 程式寫很髒請見諒 如有問題可以發問
-//如有程式碼邏輯問題87%是小弟考慮不周畢竟是邊寫邊想的很大機率有遺漏 
-//目前重新登使用者後bug連連...
- 
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include<math.h>
 #include <string.h>
@@ -159,12 +155,14 @@ message *newmsg(char name[10],char fname[10],int line,char content[200],int nf,i
 	temp->line=line;
 	strcpy(temp->fname,fname);
 	strcpy(temp->content,content);
+	temp->nf=nf;
+	temp->fn=fn;
 	temp->next=NULL;
 
 	return temp;
 }
 
-void printList() {//印出可加入好友用 
+void printList() {//印出可加入好友用 //中間測試用的不用理 
 	userinf *ptr;
 	ptr=head;
 //	printf("\n============================\n");
@@ -365,7 +363,7 @@ int chat_friend() {
 	printf("您的好友列表");
 	printf("\n-----------------------------------------------\n");
 	if(yptr==NULL){
-		printf("1");
+		//printf("1");//判斷 
 		printf("您還沒有好友可以聊天,快去加一個朋友來聊天吧!\n");
 		return 1;
 	}
@@ -376,7 +374,7 @@ int chat_friend() {
 		}
 		if(strcmp(name,yptr->name)!=0&&yptr->fnext==NULL){
 			if(num==0){
-				printf("2");
+				//printf("2");//判斷 
 				printf("您還沒有好友可以聊天,快去加一個朋友來聊天吧!\n");
 				return 1;
 			}else{
@@ -408,7 +406,7 @@ int chat_friend() {
 			printf("開始與%s對話吧!",fname);
 			printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 			printf("如果要離開聊天室 請輸入'exit'\n");
-			printf("當讀到空白鍵會跑下一行\n");
+			printf("當讀到空白鍵會變成下一行\n");
 			printf("\n\n");
 			if(mptr!=NULL){
 				printf("過去的聊天紀錄\n");
@@ -424,7 +422,13 @@ int chat_friend() {
 					}else{
 						printf("%s:%s\n",mptr->name,mptr->content);
 					}*/
-					printf("%s:%s\n",mptr->name,mptr->content);
+					if(mptr->fn==0){
+						printf("您已將此朋友封鎖\n");
+						break;
+					}else{
+						printf("%s:%s\n",mptr->name,mptr->content);
+					}
+					//printf("%s:%s\n",mptr->name,mptr->content);
 				}
 				mptr=mptr->next;
 			}
@@ -453,15 +457,24 @@ int chat_friend() {
 						}*/ 
 						if(mhead==NULL){
 							line=1;
-							mhead=newmsg(name,fname,line,content);
+							if(yptr->open_close==1){
+								mhead=newmsg(name,fname,line,content,1,1);
+							}else{
+								mhead=newmsg(name,fname,line,content,1,0);
+							}	
 						}else{
 							mptr=mhead;
 							while(mptr->next!=NULL){
 								mptr=mptr->next;
 								line++;
 							}
-							mptr->next=newmsg(name,fname,line,content);
-							mptr->next==NULL; 
+							if(yptr->open_close==1){
+								mptr->next=newmsg(name,fname,line,content,1,1);
+								mptr->next==NULL; 
+							}else{
+								mptr->next=newmsg(name,fname,line,content,1,0);
+							}
+							
 						}
 					}
 					printf("                                 %s\n",content);
@@ -512,7 +525,7 @@ int delete_friend() {
 		if(strcmp(fname,yptr->fname)==0){//如果相符合黑掉 //尚未做動作 
 			yptr->open_close=0;
 			printf("此後他的訊息將不會顯示!\n");//*newfriend(char name[10],char fname[10],int open_close,int count);
-			printf("%s %s %d %d",yptr->name,yptr->fname,yptr->open_close,yptr->count);
+		//	printf("%s %s %d %d",yptr->name,yptr->fname,yptr->open_close,yptr->count);
 			break;
 		} 
 	}
@@ -540,7 +553,7 @@ int off_line(){//實作連線因該會要有ex:線上第幾人的問題 下線
 	if(strcmp(optr->name,lptr->name)==0&&optr->onoff==1){//本地端資訊與登錄者資訊相同且為上線狀態 
 		optr->next=optr->next->next;
 		lhead=NULL;
-		printf("%s %s",optr->name,lptr->name);
+	//	printf("%s %s",optr->name,lptr->name);
 		printf("雖然很難過,期待下次您的使用");
 		return 1;
 	}else{
